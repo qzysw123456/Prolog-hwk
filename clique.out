@@ -1,0 +1,52 @@
+Standard ML of New Jersey v110.80 [built: Thu Aug 18 15:00:00 2016]
+- 
+[opening c:/Users/qzy/AppData/Local/Temp/emacs-region8356HFU]
+datatype edge = Edge of int * int list
+datatype graph = Graph of int list * edge list
+val G = Graph ([1,2,3,4],[Edge (#,#),Edge (#,#),Edge (#,#),Edge (#,#)])
+  : graph
+[autoloading]
+[library $SMLNJ-BASIS/basis.cm is stable]
+[library $SMLNJ-BASIS/(basis.cm):basis-common.cm is stable]
+[autoloading done]
+c:/Users/qzy/AppData/Local/Temp/emacs-region8356HFU:11.5-11.71 Warning: match nonexhaustive
+          (u,Edge (node,ls) :: tl) => ...
+  
+c:/Users/qzy/AppData/Local/Temp/emacs-region8356HFU:6.29 Warning: calling polyEqual
+val member = fn : ''a -> ''a list -> bool
+val check = fn : ''a list -> ''a list -> bool
+val getAdj = fn : int -> edge list -> int list
+val isclique = fn : int list -> graph -> bool
+exception Illegal_Clique
+exception Clique_Impossible
+val present_clique = fn : int list -> unit
+val find_clique = fn : int list -> int -> int list -> graph -> unit
+val max_clique = fn : graph -> int -> unit
+val it = () : unit
+- G;
+val it = Graph ([1,2,3,4],[Edge (#,#),Edge (#,#),Edge (#,#),Edge (#,#)])
+  : graph
+- max_clique G 2;
+[1,2];
+
+[1,3];
+
+[2,3];
+
+[2,4];
+
+[3,4];
+
+No (more) solutions
+val it = () : unit
+- max_clique G 3;
+[1,2,3];
+
+[2,3,4];
+
+No (more) solutions
+val it = () : unit
+- max_clique G 4;
+No (more) solutions
+val it = () : unit
+- 

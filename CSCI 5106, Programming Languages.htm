@@ -1,0 +1,252 @@
+
+<!-- saved from url=(0082)http://www-users.cselabs.umn.edu/classes/Fall-2017/csci5106/resources/hws/hw8.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252"><title>CSCI 5106, Programming Languages</title>
+
+</head><body><center>
+<img align="bottom" src="./CSCI 5106, Programming Languages_files/syssesqui.jpg" alt="[UMN logo]">
+</center>
+
+<h1><center>
+CSCI 5106: Programming Languages<br>
+Fall 2017, University of Minnesota<br>
+Homework 8
+</center>
+</h1>
+
+<hr><p>
+
+<b>Posted:</b>Dec 3, 2017</p><p>
+<b>Due By:</b>Dec 13, 2017<i></i>
+</p><p></p><hr><p>
+
+</p><h2>Problem 1 (4 points, 2 point for each part)</h2>
+
+Do Problem 11.2 parts (c) and (e) from the book.
+
+<p></p><hr><p>
+
+</p><h2>Problem 2 (6 points, 3 points for each part)</h2>
+
+Define relations to determine the following:
+<ol>
+<li>Is a list L1 a permutation of another list L2?
+<p>
+</p></li><li>Does a list have an even number of elements?
+</li></ol>
+
+<p></p><hr><p>
+
+</p><h2>Problem 3 (3 + 3 points)</h2>
+
+Exercise 11.9 in the book. However, before drawing
+the search trees, explain any differences there might be in the
+behaviour of Prolog on the two queries.
+
+<p></p><hr><p>
+
+</p><h2>Problem 4 (2 + 2 + 3 + 3 + 4 points) </h2>
+
+In this problem, we will redo Problem 3 from HW 7, but this time using
+Prolog.
+
+<ol>
+<li>Describe an abstract syntax representation for logical expressions
+of the kind encountered in <a href="http://www-users.cselabs.umn.edu/classes/Fall-2017/csci5106/resources/hws/hw7.html#p3">Problem 3 of HW7</a> in Prolog.
+<p>
+</p></li><li>Describe a representation for the assignment of truth values for a
+collection of propositional variables in Prolog.
+<p>
+</p></li><li>Define a predicate <i>istrue</i> that takes a logical expression
+<i>E</i> and an assignment <i>L</i> of truth values for propositional
+variables, both represented in the ways you have just described, and
+that succeeds just in the case the truth value of <i>E</i> under the
+assignment <i>L</i> is true.
+<p>
+</p></li><li>Define a two place predicate <i>varsOf</i> such
+  that <i>varsOf(E,V)</i> succeeds just in the case that <i>V</i> is a
+  list of the propositional variables in <i>E</i>. You may assume
+  that <i>E</i> is fully instantiated, i.e. it does not contain any
+  Prolog variables in it, and that <i>V</i> is a variable, i.e. it is
+  what is to be found by the query <i>varsOf(E,V)</i>. Your definition
+  should be such that the same variable does not appear more than once
+  in the list that is found for <i>V</i>.
+<p>
+</p></li><li>Define a predicate <i>istaut</i> that takes a logical
+  expression <i>E</i> and succeeds just in the case <i>E</i> is a
+  tautology.
+<p>
+Hint: Think of defining a two place predicate called <i>isAssignment</i>
+that holds between a list of propositional variables and an assignment
+when the second argument is an assignment for the propositional
+variables; note that <i>isAssignment</i> can succeed many times for
+any given list of propositional variables. Now think of defining a
+predicate <i>isNotTaut</i> using <i>isAssignment</i>
+and <i>isTrue</i> or, more precisely, <i>not</i>
+of <i>isTrue</i>. Finally, define <i>isTaut</i> using the not
+predicate with <i>isNotTaut</i>.
+</p></li></ol>
+
+<p></p><hr><p>
+
+
+
+</p><h2>Problem 5 (6 points)</h2>
+
+A <i>clique</i> in an undirected graph is a subgraph in which every
+node is connected to every other node. A <i>k-clique</i> is a clique
+that contains <i>k</i> nodes. This problem requires you to define the
+property of a collection of nodes being a k-clique in an given graph
+for particular choices of k. This definition must be such that it can
+be used to list all such cliques successively.
+<p>
+To give the problem concreteness, we should describe the
+representation to be used for undirected graphs. We will describe them
+by a pair, the first item of which is a listing of the nodes in the
+graph and the second is a representation of the connections in the
+graph. The connections will be represented as a list of
+pairs consisting of a node and a list of its neighbours. Thus,
+consider the graph
+</p><blockquote>
+  <pre>                    2
+                  / | \
+                 /  |  \
+                /   |   \
+	      1     |     4
+                \   |   /
+                 \  |  /
+                  \ | /
+		    3  
+  </pre>
+</blockquote>
+This graph will be represented by the following term in Prolog
+<blockquote>
+  <pre>    ([1,2,3,4],[(1,[2,3]),(2,[1,3,4]),(3,[1,2,4]),(4,[2,3])])
+  </pre>
+</blockquote>
+To keep things simple, we will use positive numbers to represent
+nodes; to be more general, we might want to use strings representing
+the names of the nodes but, since our focus in this problem is on
+specifications and search, we will not worry about the complications
+arising from this generalization. Note also that such a description
+must satisfy certain consistency requirements. For example, if the
+node 2 appears in the list of neighbours of the node 1, then, since
+the graph is an undirected one, the node 1 must appear in the list of
+neighbours of the node 2. We will assume that these properties hold of
+any representation of a graph that is given to us. 
+<p>
+Now that we have fixed the representation, we can be more specific
+about the task in this problem. It is to define a three argument
+predicate <i>clique</i> such that <i>clique(Graph,K,Clique)</i> holds
+exactly when <i>Clique</i> is a list of distinct nodes of
+length <i>K</i> that constitutes a clique in the
+graph <i>Graph</i>. Your definition should permit the following kinds
+of interactions
+</p><blockquote>
+  <pre>    ?- clique(([1,2,3,4],[(1,[2,3]),(2,[1,3,4]),(3,[1,2,4]),(4,[2,3])]), 2, Clique).
+    Clique = [1, 2] ;
+    Clique = [1, 3] ;
+    Clique = [2, 3] ;
+    Clique = [2, 4] ;
+    Clique = [3, 4] ;
+    false.
+
+   ?- clique(([1,2,3,4],[(1,[2,3]),(2,[1,3,4]),(3,[1,2,4]),(4,[2,3])]), 3, Clique).
+   Clique = [1, 2, 3] ;
+   Clique = [2, 3, 4] ;
+   false.
+
+   ?- clique(([1,2,3,4],[(1,[2,3]),(2,[1,3,4]),(3,[1,2,4]),(4,[2,3])]), 4, Clique).
+   false.
+
+   ?- clique(([1,2,3,4],[(1,[2,3]),(2,[1,3,4]),(3,[1,2,4]),(4,[2,3])]), 3, [1,2,3]).
+    true 
+
+   ?-
+  </pre>
+</blockquote>
+To avoid redundant search, you may assume that the listing of the
+nodes in the clique must preserve the order in which the nodes are
+listed in the graph. Thus, it is okay that the following query fails:
+<blockquote>
+<pre>   ?- clique(([1,2,3,4],[(1,[2,3]),(2,[1,3,4]),(3,[1,2,4]),(4,[2,3])]), 4, [2,1,3]).
+   false.
+
+   ?-
+</pre>
+</blockquote>
+
+Hint: Think of using the "generate-and-test" idea in writing the
+definition: to do this, you should generate a purported clique and
+then check if it is indeed one. 
+
+
+<p></p><hr><p>
+</p><h2>Problem 6 (5 points)</h2>
+
+Here we will solve the clique problem using Standard ML; the objective
+of this problem is to understand the difference between logic
+programming and other styles of programming from the perspective of
+their treatment of search.
+<p>
+The first thing to note is that we have to define <i>clique</i> as a
+function in Standard ML, i.e. we have to designate some of its
+arguments as input and others as output. We will accordingly assume
+that we are given the graph and the size of the clique we want to
+find. The goal then is to define the function such that it presents
+solutions successively to the user till he/she is satisfied or all the
+solutions have been exhausted. Thus, we expect the following kind of
+interaction
+</p><blockquote>
+  <pre>    - clique ([1,2,3,4],[(1,[2,3]),(2,[1,3,4]),(3,[1,2,4]),(4,[2,3])]) 2;
+    [1,2];
+
+    [1,3];
+
+    [2,3];
+
+    [2,4];
+
+    [3,4];
+
+    No (more) solutions
+    val it = () : unit
+    - clique ([1,2,3,4],[(1,[2,3]),(2,[1,3,4]),(3,[1,2,4]),(4,[2,3])]) 3;
+    [1,2,3];
+
+    [2,3,4];
+
+    No (more) solutions
+    val it = () : unit
+    - clique ([1,2,3,4],[(1,[2,3]),(2,[1,3,4]),(3,[1,2,4]),(4,[2,3])]) 4;
+    No (more) solutions
+    val it = () : unit
+    -
+</pre>
+</blockquote>
+An important requirement of your program is that it
+must produce the cliques only on demand, i.e., it is not
+acceptable to write an auxiliary function that produces all the
+solutions at once and then to call a print function that shows these
+lists one at a time. Even more concretely, you must think
+explicitly of how to embed the search that is required in an ML program.
+<p>
+To get you started on this problem, I can suggest two equally interesting
+ways to solve it. One approach is to use exceptions to encapsulate
+failure in search; the exception handler then starts an exploration of
+an alternative path when a failure is encountered. A second approach
+is to generalize the idea of continuations to a <i>pair</i> of
+continuations, one that tells the function that is called what to do
+when success is encountered and another that tells the called function
+how to proceed if it sees a failure. To help you understand how to use
+these two approaches, I have made available <a href="http://www-users.cselabs.umn.edu/classes/Fall-2017/csci5106/resources/code/subsetsum.sml">my
+    solutions in Standard ML</a> to the <i>subset sum</i> problem that
+we will talk about in class and also solve in Prolog. You can adapt
+and use the code you find in this file for interacting with the user.
+</p><p></p><hr><p>
+
+</p><address>
+Last updated on Dec 3, 2017 by gopalan atsign cs dot umn dot edu
+<p></p><hr><p>
+</p><div id="disclaimer" style="font-weight: normal; clear: both; margin-top: 5px; font-size: small; font-style: italic;">The views and opinions expressed in this page are strictly those of the page author(s). The contents of this page have not been reviewed or approved by the University of Minnesota.<p></p></div>
+</address>
+</body></html>
